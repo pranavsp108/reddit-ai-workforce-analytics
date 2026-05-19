@@ -1,5 +1,10 @@
 # AI Workforce Impact Intelligence Platform
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://reddit-ai-workforce-analytics.streamlit.app/)
+
+**GitHub Repo:** https://github.com/pranavsp108/reddit-ai-workforce-analytics  
+**Live Dashboard:** https://reddit-ai-workforce-analytics.streamlit.app/
+
 An end-to-end NLP and machine learning platform that analyzes Reddit discussions about AI-driven workforce disruption, career anxiety, hiring-market shifts, and occupation-level impact.
 
 The project transforms unstructured Reddit comments into structured labor-market intelligence using Reddit data collection, text preprocessing, weak-label taxonomy design, sentiment analysis, embedding-based topic modeling, engagement prediction, and an interactive Streamlit dashboard.
