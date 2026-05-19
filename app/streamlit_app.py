@@ -20,8 +20,12 @@ st.set_page_config(
 # Paths
 # -----------------------------
 
-DATA_PATH = Path("data/processed/dashboard_dataset.csv")
-DATA_WITH_MISC_PATH = Path("data/processed/dashboard_dataset_with_misc.csv")
+PRIVATE_DATA_PATH = Path("data/processed/dashboard_dataset.csv")
+PUBLIC_DATA_PATH = Path("data/sample/dashboard_dataset_features_full.csv")
+
+PRIVATE_DATA_WITH_MISC_PATH = Path("data/processed/dashboard_dataset_with_misc.csv")
+PUBLIC_SAMPLE_PATH = Path("data/sample/dashboard_dataset_sample.csv")
+
 ENGAGEMENT_FULL_IMPORTANCE_PATH = Path(
     "outputs/engagement_model/random_forest_feature_importance.csv"
 )
@@ -42,13 +46,51 @@ CONTENT_MODEL_CHART_PATH = Path(
 
 @st.cache_data
 def load_data():
-    if not DATA_PATH.exists():
+    """
+    Load private full dashboard dataset if available.
+    Otherwise fall back to the public feature-only sample/full dataset included in GitHub.
+    """
+
+    if PRIVATE_DATA_PATH.exists():
+        data_path = PRIVATE_DATA_PATH
+        data_mode = "Full local dataset"
+    elif PUBLIC_DATA_PATH.exists():
+        data_path = PUBLIC_DATA_PATH
+        data_mode = "Public feature-only dataset"
+    elif PUBLIC_SAMPLE_PATH.exists():
+        data_path = PUBLIC_SAMPLE_PATH
+        data_mode = "Public sample dataset"
+    else:
         st.error(
-            "dashboard_dataset.csv not found. Run: python src/create_dashboard_dataset.py"
+            "No dashboard dataset found. Expected one of:\n"
+            "- data/processed/dashboard_dataset.csv\n"
+            "- data/sample/dashboard_dataset_features_full.csv\n"
+            "- data/sample/dashboard_dataset_sample.csv"
         )
         st.stop()
 
-    df = pd.read_csv(DATA_PATH)
+    df = pd.read_csv(data_path)
+
+    # Add missing safe fallback columns for public feature-only data
+    if "comment_body" not in df.columns:
+        df["comment_body"] = "Comment text removed from public dataset."
+
+    if "post_title" not in df.columns:
+        df["post_title"] = "Post title unavailable"
+
+    if "use_in_dashboard" not in df.columns:
+        df["use_in_dashboard"] = "yes"
+
+    if "vader_compound" not in df.columns:
+        df["vader_compound"] = 0.0
+
+    if "vader_sentiment_label" not in df.columns:
+        df["vader_sentiment_label"] = "unknown"
+
+    if "high_engagement" not in df.columns and "score" in df.columns:
+        df["score"] = pd.to_numeric(df["score"], errors="coerce")
+        threshold = df["score"].quantile(0.90)
+        df["high_engagement"] = (df["score"] >= threshold).astype(int)
 
     # Datetime parsing
     for col in ["comment_created_datetime", "post_created_datetime"]:
@@ -71,6 +113,9 @@ def load_data():
     for col in numeric_cols:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    df.attrs["data_mode"] = data_mode
+    df.attrs["data_path"] = str(data_path)
 
     return df
 
@@ -114,7 +159,8 @@ def horizontal_bar(df, x, y, title, height=450):
 # -----------------------------
 
 df = load_data()
-
+data_mode = df.attrs.get("data_mode", "Unknown dataset")
+data_path = df.attrs.get("data_path", "Unknown path")
 # -----------------------------
 # Sidebar filters
 # -----------------------------
@@ -182,7 +228,7 @@ st.caption(
     "Reddit-scale NLP analytics platform for identifying AI workforce disruption themes, "
     "occupation-level concerns, engagement drivers, and labor-market narratives."
 )
-
+st.info(f"Dataset loaded: **{data_mode}** from `{data_path}`")
 
 # -----------------------------
 # Tabs
@@ -580,6 +626,13 @@ with tabs[5]:
 
     explorer_df = explorer_df.sort_values(sort_option, ascending=ascending)
 
+    comment_display_col = "comment_body"
+
+    if "comment_excerpt" in explorer_df.columns and (
+        explorer_df["comment_body"].astype(str).eq("Comment text removed from public dataset.").all()
+    ):
+        comment_display_col = "comment_excerpt"
+
     display_cols = [
         "subreddit",
         "post_title",
@@ -590,7 +643,7 @@ with tabs[5]:
         "primary_disruption_category",
         "occupation_bucket",
         "impact_severity",
-        "comment_body",
+        comment_display_col,
     ]
 
     display_cols = [col for col in display_cols if col in explorer_df.columns]

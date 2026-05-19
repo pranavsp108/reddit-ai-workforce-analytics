@@ -3,15 +3,26 @@ __pycache__/
 .ipynb_checkpoints/
 .DS_Store
 
+# Private/raw data
 data/raw/
 data/processed/
-models/
-outputs/topic_modeling*/
-outputs/engagement_model/*.joblib
-*.pkl
-*.npy
 
+# Keep public-safe sample data
 !data/sample/
 !data/sample/*.csv
+
+# Models and large artifacts
+models/
+*.pkl
+*.joblib
+*.npy
+
+# Heavy outputs
+outputs/topic_modeling*/
+outputs/dashboard_assets/
+
+# Keep screenshots and selected charts
 !outputs/screenshots/
 !outputs/screenshots/*.png
+!outputs/engagement_model/
+!outputs/engagement_model/*.png
