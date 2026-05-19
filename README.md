@@ -1,8 +1,8 @@
 # AI Workforce Impact Intelligence Platform
 
-An end-to-end NLP and machine learning analytics platform that analyzes Reddit discussions about AI-driven workforce disruption, career anxiety, hiring-market shifts, and occupation-level impact.
+An end-to-end NLP and machine learning platform that analyzes Reddit discussions about AI-driven workforce disruption, career anxiety, hiring-market shifts, and occupation-level impact.
 
-The project transforms unstructured Reddit comments into structured labor-market intelligence using Reddit data collection, text preprocessing, weak-label taxonomy design, sentiment analysis, topic modeling, engagement prediction, and an interactive Streamlit dashboard.
+The project transforms unstructured Reddit comments into structured labor-market intelligence using Reddit data collection, text preprocessing, weak-label taxonomy design, sentiment analysis, embedding-based topic modeling, engagement prediction, and an interactive Streamlit dashboard.
 
 ---
 
