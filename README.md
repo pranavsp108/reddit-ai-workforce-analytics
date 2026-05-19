@@ -1,6 +1,6 @@
 # AI Workforce Impact Intelligence Platform
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://reddit-ai-workforce-analytics.streamlit.app/)
+[![Live App](https://img.shields.io/badge/Live%20App-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://reddit-ai-workforce-analytics.streamlit.app/)
 
 **GitHub Repo:** https://github.com/pranavsp108/reddit-ai-workforce-analytics  
 **Live Dashboard:** https://reddit-ai-workforce-analytics.streamlit.app/
