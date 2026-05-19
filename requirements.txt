@@ -1,0 +1,17 @@
+praw
+pandas
+python-dotenv
+numpy
+matplotlib
+seaborn
+scikit-learn
+nltk
+textblob
+vaderSentiment
+plotly
+streamlit
+vaderSentiment
+bertopic
+sentence-transformers
+umap-learn
+hdbscan

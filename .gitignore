@@ -1,0 +1,17 @@
+.env
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+
+data/raw/
+data/processed/
+models/
+outputs/topic_modeling*/
+outputs/engagement_model/*.joblib
+*.pkl
+*.npy
+
+!data/sample/
+!data/sample/*.csv
+!outputs/screenshots/
+!outputs/screenshots/*.png
